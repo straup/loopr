@@ -12,7 +12,7 @@ from watchdog.events import FileSystemEventHandler
 
 import multiprocessing
 
-def loopify(gifsicle, queue, outdir):
+def loopify(gifsicle, queue, outdir, w=None):
 
     gif_queue = []
 
@@ -26,10 +26,16 @@ def loopify(gifsicle, queue, outdir):
         gif = os.path.join(tmpdir, "%s.gif" % fname)
 
         im = Image.open(path)
+        sz = im.size
 
-        # TO DO: resize?
-        # (w, h) = im.size
-        # im.resize((w, h))
+        # TO DO: account for tall things...
+
+        if w:
+
+            wpercent = (500/float(sz[0]))
+            h = int((float(sz[1]) * float(wpercent)))
+
+            im = im.resize((w, h))
 
         im = im.convert('P', palette=Image.ADAPTIVE)
         im.save(gif)
@@ -59,7 +65,7 @@ def loopify(gifsicle, queue, outdir):
     # freak out and generally be sad
 
     # also, passing very long arguments makes
-    # something fail – probably a args list is
+    # something fail - probably a args list is
     # too long error...
 
     args.extend(gif_queue)
