@@ -15,11 +15,14 @@ import multiprocessing
 redis = redis.Redis()
 
 def publish(path):
-    
+
+    # tranform 'path' in to a 'url'
     # publish to s3 or other ?
 
+    url = path
+
     try:
-        redis.publish('loopr', path)
+        redis.publish('loopr', url)
     except Exception, e:
         pass
 
