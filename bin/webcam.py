@@ -7,9 +7,6 @@ import sys
 import time
 import logging
 import os.path
-import tempfile
-import re
-import subprocess
 import logging
 
 import cv2

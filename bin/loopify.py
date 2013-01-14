@@ -12,7 +12,7 @@ from watchdog.events import FileSystemEventHandler
 
 import multiprocessing
 
-def loopify(gifsicle, queue, outdir, w=None):
+def loopify(gifsicle, queue, outdir, maxwidth=None):
 
     gif_queue = []
 
@@ -30,9 +30,11 @@ def loopify(gifsicle, queue, outdir, w=None):
 
         # TO DO: account for tall things...
 
-        if w:
+        if maxwidth:
 
-            wpercent = (500/float(sz[0]))
+            w = int(maxwidth)
+
+            wpercent = (w/float(sz[0]))
             h = int((float(sz[1]) * float(wpercent)))
 
             im = im.resize((w, h))
@@ -109,7 +111,7 @@ class Eyeballs(FileSystemEventHandler):
             self.queue = self.queue[self.count:]
 
             logging.debug("loopify now")
-            pool.apply_async(loopify, (self.opts.gifsicle, queue, self.opts.out))
+            pool.apply_async(loopify, (self.opts.gifsicle, queue, self.opts.out, self.opts.maxwidth))
 
 if __name__ == '__main__':
 
@@ -120,7 +122,8 @@ if __name__ == '__main__':
     parser.add_option("-w", "--watch", dest="watch", help="", default=None)
     parser.add_option("-o", "--out", dest="out", help="", default=None)
     parser.add_option("-c", "--count", dest="count", help="", default=200)
-    parser.add_option("-g", "--gifsicle", dest="gifsicle", help="", default="/usr/local/bin/gifsicle"),    
+    parser.add_option("--gifsicle", dest="gifsicle", help="", default="/usr/local/bin/gifsicle"),    
+    parser.add_option("--max-width", dest="maxwidth", help="", default=None)
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="enable chatty logging; default is false", default=False)
 
     (opts, args) = parser.parse_args()
