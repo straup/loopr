@@ -58,6 +58,10 @@ def loopify(gifsicle, queue, outdir):
     # passing /some/dir/*.gif makes subcommands
     # freak out and generally be sad
 
+    # also, passing very long arguments makes
+    # something fail – probably a args list is
+    # too long error...
+
     args.extend(gif_queue)
 
     args.extend(["-o", outfile])
