@@ -49,7 +49,7 @@ if __name__ == '__main__':
     while True:
 
         try:
-            logging.info("taking a picture...")
+            logging.debug("taking a picture...")
             path = capture(opts.local)
         except Exception, e:
             log.error("unable to time a picture, because: %s" % e)
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         if not opts.timer:
             break
 
-        logging.info("sleep for %s seconds" % opts.timer)
+        logging.debug("sleep for %s seconds" % opts.timer)
         time.sleep(float(opts.timer))
 
     logging.info("all done")
