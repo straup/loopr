@@ -6,7 +6,7 @@ import tempfile
 import json
 import os.path
 
-def syndicate(data, pending='/Users/asc/Desktop'):
+def syndicate(data, pending='/Users/asc/Desktop/loopr'):
 
     r.lpush('loopr_urls', data)
     r.ltrim('loopr_urls', 0, 100)
@@ -16,18 +16,20 @@ def syndicate(data, pending='/Users/asc/Desktop'):
 
     try:
         tmpdir = tempfile.gettempdir()
-        index = os.path.join(tmpdir, 'index.json')
+        index = os.path.join(tmpdir, 'loopr.json')
 
         fh = open(index, 'w')
-        json.dump(fh, {'urls': urls}, indent=2)
+        json.dump(urls, fh, indent=2)
         fh.close()
     
-        pending_path = os.path.join(pending, 'index.json')
+        pending_path = os.path.join(pending, 'loopr.json')
         print pending_path
 
         os.rename(index, pending_path)
     except Exception, e:
         print e
+
+    print "OK"
 
 pool = multiprocessing.Pool()
 

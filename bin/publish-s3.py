@@ -31,7 +31,7 @@ def publish(path):
         logging.error(e)
         return False
 
-    # os.unlink(path)
+    os.unlink(path)
 
     aws_path = "%s/%s" % ('<bucket_name>', fname)
     url = 'http://s3.amazonaws.com/%s' % aws_path
@@ -40,15 +40,12 @@ def publish(path):
     ext = ext.replace(".", "")
 
     key = "loopr_%s" % ext
-    print key
-    print url
 
     try:
         r = redis.Redis()
         r.publish(key, url)
     except Exception, e:
         print e
-        pass
 
 pool = multiprocessing.Pool()
 
