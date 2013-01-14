@@ -5,11 +5,7 @@ import tempfile
 import json
 import os.path
 
-def syndicate(data, bucket, pending='/Users/asc/Desktop/loopr'):
-
-    r.lpush('loopr_urls', data)
-    r.ltrim('loopr_urls', 0, 100)
-    urls = r.lrange('loopr_urls', 0, 15)
+def syndicate(urls, bucket, pending='/Users/asc/Desktop/loopr'):
 
     # print urls
 
@@ -59,7 +55,12 @@ if __name__ == '__main__':
                 continue
 
             elif item['channel'] == channel:
-                syndicate(item['data'], opts.bucket)
+
+                r.lpush('loopr_urls', data)
+                r.ltrim('loopr_urls', 0, 100)
+                urls = r.lrange('loopr_urls', 0, 15)
+
+                syndicate(urls, opts.bucket)
                     
             else:
                 pass
