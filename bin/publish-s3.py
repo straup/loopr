@@ -11,7 +11,7 @@ from watchdog.events import FileSystemEventHandler
 
 import multiprocessing
 
-def publish(path):
+def publish(path, bucket):
 
     fname = os.path.basename(path)
 
@@ -19,7 +19,7 @@ def publish(path):
         "s3put",
         "-a", "<access_key>",
         "-s", "<secret_key>",
-        "-b", "<bucket_name>",
+        "-b", bucket,
         "-g", "public-read",
         path
         ]
@@ -33,13 +33,13 @@ def publish(path):
 
     os.unlink(path)
 
-    aws_path = "%s/%s" % ('<bucket_name>', fname)
+    aws_path = "%s/%s" % (bucket, fname)
     url = 'http://s3.amazonaws.com/%s' % aws_path
 
     fname, ext = os.path.splitext(fname)
     ext = ext.replace(".", "")
 
-    key = "loopr_%s" % ext
+    key = "loopr_%s_%s" % (bucket, ext)
 
     try:
         r = redis.Redis()
@@ -64,16 +64,16 @@ class Eyeballs(FileSystemEventHandler):
 
         path = event.src_path
 
-        pool.apply_async(publish, (path,))
+        pool.apply_async(publish, (path, self.opts.bucket))
 
 
 if __name__ == '__main__':
 
-    import sys
     import optparse
 
     parser = optparse.OptionParser()
     parser.add_option("-w", "--watch", dest="watch", help="", default=None)
+    parser.add_option("-b", "--bucket", dest="bucket", help="", default=None)
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="enable chatty logging; default is false", default=False)
 
     (opts, args) = parser.parse_args()
