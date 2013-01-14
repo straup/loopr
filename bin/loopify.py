@@ -55,6 +55,9 @@ def loopify(gifsicle, queue, outdir):
         "--careful",
         ]
 
+    # passing /some/dir/*.gif makes subcommands
+    # freak out and generally be sad
+
     args.extend(gif_queue)
 
     args.extend(["-o", outfile])
