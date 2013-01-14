@@ -10,14 +10,11 @@ from watchdog.events import FileSystemEventHandler
 
 import multiprocessing
 
-# note awesome...
+# not awesome...
 
 redis = redis.Redis()
 
 def publish(path):
-
-    # tranform 'path' in to a 'url'
-    # publish to s3 or other ?
 
     url = path
 
@@ -28,7 +25,6 @@ def publish(path):
 
 pool = multiprocessing.Pool()
 
-
 #
 
 class Eyeballs(FileSystemEventHandler):
@@ -36,7 +32,7 @@ class Eyeballs(FileSystemEventHandler):
     def __init__(self, observer, opts):
         self.observer = observer
         self.opts = opts
-        
+
     def on_any_event(self, event):
 
         if event.event_type != 'created':

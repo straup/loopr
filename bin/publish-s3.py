@@ -2,33 +2,53 @@
 
 import time
 import os.path
-import subprocess
 import logging
-import glob
-import tempfile
+import subprocess
+import redis
 
 from watchdog.observers.fsevents import FSEventsObserver as Observer
 from watchdog.events import FileSystemEventHandler
 
 import multiprocessing
 
-def do_filtr(filtr_bin, path, outdir):
+def publish(path):
 
     fname = os.path.basename(path)
-    tmpdir = tempfile.gettempdir()
 
-    tmpfile = os.path.join(tmpdir, fname)
+    args = [
+        "s3put",
+        "-a", "<access_key>",
+        "-s", "<secret_key>",
+        "-b", "<bucket_name>",
+        "-g", "public-read",
+        path
+        ]
 
-    subprocess.check_call([filtr_bin, path, tmpfile])
-
-    if not os.path.exists(tmpfile):
+    try:
+        print args
+        # subprocess.check_call(args)
+    except Exception, e:
+        logging.error(e)
         return False
 
-    filtred_path = os.path.join(outdir, fname)
-    os.rename(tmpfile, filtred_path)
+    # os.unlink(path)
 
-    os.unlink(path)
-    return True
+    aws_path = "%s/%s" % ('<bucket_name>', fname)
+    url = 'http://s3.amazonaws.com/%s' % aws_path
+
+    fname, ext = os.path.splitext(fname)
+    ext = ext.replace(".", "")
+
+    key = "loopr_%s" % ext
+    print key
+    print url
+
+    try:
+        r = redis.Redis()
+        r.publish(key, url)
+    except Exception, e:
+        print e
+        pass
 
 pool = multiprocessing.Pool()
 
@@ -40,29 +60,23 @@ class Eyeballs(FileSystemEventHandler):
         self.observer = observer
         self.opts = opts
 
-        filtr = os.path.join(self.opts.filtr, 'recipes', self.opts.recipe)
-        self.filtr_bin = os.path.realpath(filtr)
-
-        for path in glob.glob("%s/*.jpg" % self.opts.watch):
-            pool.apply_async(do_filtr, (self.filtr_bin, path, self.opts.out))
-        
     def on_any_event(self, event):
 
         if event.event_type != 'created':
             return
 
         path = event.src_path
-        pool.apply_async(do_filtr, (self.filtr_bin, path, self.opts.out))
+
+        pool.apply_async(publish, (path,))
+
 
 if __name__ == '__main__':
 
+    import sys
     import optparse
 
     parser = optparse.OptionParser()
     parser.add_option("-w", "--watch", dest="watch", help="", default=None)
-    parser.add_option("-o", "--out", dest="out", help="", default=None)
-    parser.add_option("-f", "--filtr", dest="filtr", help="The path to the filtr application", default=None)
-    parser.add_option("-r", "--recipe", dest="recipe", help="The name of the filtr to apply", default='filtr')
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="enable chatty logging; default is false", default=False)
 
     (opts, args) = parser.parse_args()

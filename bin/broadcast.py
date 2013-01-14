@@ -2,9 +2,28 @@
 
 import redis
 import multiprocessing
+import tempfile
+import json
+
+# not awesome...
+
+r = redis.Redis()
 
 def publish(who, data):
     print "send %s to %s" % (data, who)
+
+    r.lpush('loopr_urls', data)
+    r.ltrim('loopr_urls', 0, 100)
+    urls = r.lrange('loopr_urls', 0, 15)
+    
+    tmpdir = tempfile.gettempdir()
+    index = os.path.join(tmpdir, 'index.json')
+
+    fh = open(index, 'w')
+    json.dump(fh, urls, indent=2)
+    fh.close()
+
+    print urls
 
     # websockets
     # https://github.com/straup/fancy-idling/blob/master/display.py
@@ -16,8 +35,6 @@ def publish(who, data):
 pool = multiprocessing.Pool()
 
 if __name__ == '__main__':
-
-    r = redis.Redis()
 
     def reload_subscriptions():
 
@@ -44,6 +61,6 @@ if __name__ == '__main__':
             elif item['channel'] == 'loopr':
                 for who in subscribers:
                     pool.apply_async(publish, (who, item['data']))
-
+                    
             else:
                 pass
