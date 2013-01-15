@@ -4,6 +4,7 @@ import redis
 import tempfile
 import json
 import os.path
+import logging
 
 def syndicate(urls, bucket, pending='/Users/asc/Desktop/loopr'):
 

@@ -14,9 +14,17 @@ import multiprocessing
 
 def do_filtr(filtr_bin, path, outdir):
 
-    fname = os.path.basename(path)
-    tmpdir = tempfile.gettempdir()
+    # This will need to be fixed eventually
+    # (20130114/straup)
+    recipe = os.path.basename(filtr_bin)
 
+    fname = os.path.basename(path)
+    fname, ext = os.path.splitext(fname)
+    ext = ext.replace(".", "")
+
+    fname = "%s-%s.%s" % (fname, recipe, ext)
+
+    tmpdir = tempfile.gettempdir()
     tmpfile = os.path.join(tmpdir, fname)
 
     subprocess.check_call([filtr_bin, path, tmpfile])
@@ -27,6 +35,7 @@ def do_filtr(filtr_bin, path, outdir):
     filtred_path = os.path.join(outdir, fname)
     os.rename(tmpfile, filtred_path)
 
+    print filtred_path
     os.unlink(path)
     return True
 
@@ -52,6 +61,8 @@ class Eyeballs(FileSystemEventHandler):
             return
 
         path = event.src_path
+
+        # do_filtr(self.filtr_bin, path, self.opts.out)
         pool.apply_async(do_filtr, (self.filtr_bin, path, self.opts.out))
 
 if __name__ == '__main__':

@@ -11,29 +11,32 @@ from watchdog.events import FileSystemEventHandler
 
 import multiprocessing
 
-def publish(path, bucket):
+def publish(path, opts):
 
+    root = os.path.dirname(path)
     fname = os.path.basename(path)
+
+    # https://github.com/sbc/boto/blob/master/bin/s3put
 
     args = [
         "s3put",
-        "-a", "<access_key>",
-        "-s", "<secret_key>",
-        "-b", bucket,
+        "-a", opts.accesskey,
+        "-s", opts.secret,
+        "-b", opts.bucket,
         "-g", "public-read",
+        "-p", root,
         path
         ]
 
     try:
-        print args
-        # subprocess.check_call(args)
+        subprocess.check_call(args)
     except Exception, e:
         logging.error(e)
         return False
 
     os.unlink(path)
 
-    aws_path = "%s/%s" % (bucket, fname)
+    aws_path = "%s/%s" % (opts.bucket, fname)
     url = 'http://s3.amazonaws.com/%s' % aws_path
 
     fname, ext = os.path.splitext(fname)
@@ -64,7 +67,7 @@ class Eyeballs(FileSystemEventHandler):
 
         path = event.src_path
 
-        pool.apply_async(publish, (path, self.opts.bucket))
+        pool.apply_async(publish, (path, opts))
 
 
 if __name__ == '__main__':
@@ -73,6 +76,8 @@ if __name__ == '__main__':
 
     parser = optparse.OptionParser()
     parser.add_option("-w", "--watch", dest="watch", help="", default=None)
+    parser.add_option("-a", "--accesskey", dest="accesskey", help="", default=None)
+    parser.add_option("-s", "--secret", dest="secret", help="", default=None)
     parser.add_option("-b", "--bucket", dest="bucket", help="", default=None)
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="enable chatty logging; default is false", default=False)
 
