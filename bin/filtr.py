@@ -35,7 +35,6 @@ def do_filtr(filtr_bin, path, outdir):
     filtred_path = os.path.join(outdir, fname)
     os.rename(tmpfile, filtred_path)
 
-    print filtred_path
     os.unlink(path)
     return True
 

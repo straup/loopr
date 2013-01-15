@@ -6,11 +6,11 @@ import json
 import os.path
 import logging
 
-def syndicate(urls, bucket, pending='/Users/asc/Desktop/loopr'):
+def syndicate(urls, opts, pending='/Users/asc/Desktop/loopr'):
 
     # print urls
 
-    fname = "%s.bucket"
+    fname = "%s.json" % opts.bucket
 
     try:
         tmpdir = tempfile.gettempdir()
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     else:
         logging.basicConfig(level=logging.INFO)
 
-    channel = "loopr_%s_gif" % opts.bucket
+    channel = "loopr_%s" % opts.bucket.replace(".", "_")
 
     r = redis.Redis()
 
@@ -52,16 +52,18 @@ if __name__ == '__main__':
 
         for item in ps.listen():
 
+            print item
+
             if item['type'] != 'message':
                 continue
 
             elif item['channel'] == channel:
 
-                r.lpush('loopr_urls', data)
+                r.lpush('loopr_urls', item['data'])
                 r.ltrim('loopr_urls', 0, 100)
                 urls = r.lrange('loopr_urls', 0, 15)
 
-                syndicate(urls, opts.bucket)
+                syndicate(urls, opts)
                     
             else:
                 pass

@@ -1,10 +1,16 @@
 loopr
 ==
 
-**THIS IS FAR FROM BEING DONE**
+**THIS IS A LONG WAY FROM BEING DONE**
+
+For example...
+
+	$> syndicate.py -b aws_bucket
+      
+	$> publish-s3.py -w /path/to/loopr-ed -b aws_bucket -a aws_key -s aws_secret
+
+	$> loopify.py -w /path/to/filtr-ed/ -o /path/to/loopr-ed -c 10 -v --max-width 500
+
+	$> filtr.py -w /path/to/webcam -o /path/to/filtr-ed -f /usr/bin/filtr/ -r pxl
 
 	$> webcam.py -o /path/to/webcam -T 0
-
-	$> filtr.py -w /path/to/webcam -o /path/to/webcam-filtr-ed -f /path/to/filtr/ -r pxl
-
-	$> loopify.py -w /path/to/webcam-filtr-ed/ -o /path/to/gifs/

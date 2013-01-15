@@ -39,10 +39,7 @@ def publish(path, opts):
     aws_path = "%s/%s" % (opts.bucket, fname)
     url = 'http://s3.amazonaws.com/%s' % aws_path
 
-    fname, ext = os.path.splitext(fname)
-    ext = ext.replace(".", "")
-
-    key = "loopr_%s_%s" % (bucket, ext)
+    key = "loopr_%s" % opts.bucket.replace(".", "_")
 
     try:
         r = redis.Redis()
@@ -67,8 +64,9 @@ class Eyeballs(FileSystemEventHandler):
 
         path = event.src_path
 
+        # publish(path, opts)
         pool.apply_async(publish, (path, opts))
-
+        
 
 if __name__ == '__main__':
 
