@@ -63,7 +63,7 @@ To do
 
 Lots.
 
-* Documenting what's there, now.
+* Documenting what's there now and cleaning up (combining?) the various command line options.
 
 * Daemonizing all the tools and possibly adding a handy controller to... control
   all the other pieces.
