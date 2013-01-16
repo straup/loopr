@@ -80,3 +80,4 @@ See also
 * [about pua.spum.org](http://pua.spum.org/about) – the about page for just such
   a thing
 
+* [Simulate long-exposure photography with OpenCV](http://www.eliteraspberries.com/blog/2013/01/simulate-long-exposure-photography-with-opencv.html)
