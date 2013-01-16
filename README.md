@@ -1,7 +1,9 @@
 loopr
 ==
 
-**THIS IS A LONG WAY FROM BEING DONE**
+**loopr is very much a work in progress**
+
+loopr is a suite of tools for creating and broadcasting a webcam made of animated gifs and filters.
 
 For example...
 
