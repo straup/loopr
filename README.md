@@ -55,3 +55,14 @@ installed.
 This requires that you have [opencv](http://opencv.willowgarage.com/wiki/) installed (and a webcam)
 
 	$> webcam.py -o /path/to/webcam -T 0
+
+To do
+--
+
+Lots. Documentation first, then all the fancy stuff.
+
+See also
+--
+
+* ["like a dog humping your leg (with photos)"](http://www.aaronland.info/weblog/2011/05/07/fancy/#likeadog)
+
