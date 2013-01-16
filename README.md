@@ -10,7 +10,7 @@ animated gifs and filters.
 
 The suite currently consists of (5) separate applications that all act
 individually and communicate with one another by writing files to disk (or
-sometimes using a shared memory pool (like Redis).
+sometimes using a shared memory pool like Redis).
 
 This is not the only way to do things but it was the quickest and dumbest way I
 could get things working over a weekend spent with friends and a few hours at
