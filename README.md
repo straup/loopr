@@ -56,6 +56,8 @@ This requires that you have [opencv](http://opencv.willowgarage.com/wiki/) insta
 
 	$> webcam.py -o /path/to/webcam -T 0
 
+There's also a "viewing" piece which will depend on the type of broadcasting you're doing. Take a look at the [www directory](https://github.com/straup/loopr/tree/master/www) for some sample code on displaying animated gifs broadcast as a JSON file, that is updated periodically.
+
 To do
 --
 
