@@ -6,6 +6,8 @@ loopr
 loopr is a suite of tools for creating and broadcasting a webcam made of
 animated gifs and filters. 
 
+[Here's an example.](http://straup.github.com/loopr/)
+
 The suite currently consists of (5) separate applications that all act
 individually and communicate with one another by writing files to disk (or
 sometimes using a shared memory pool (like Redis).
@@ -32,19 +34,19 @@ command line. There will also eventually be a `publish-websockets.py` and so on.
 
 ### Enloopifying
 
-This requires that you have things like [gifsicle]() installed.
+This requires that you have things like [gifsicle](http://www.lcdf.org/gifsicle/) installed.
 
 	$> loopify.py -w /path/to/filtr-ed/ -o /path/to/loopr-ed -c 10 -v --max-width 500
 
 ### Filtering
 
-This requires that have a bloodier-than-bleeding-edge version of [filtr]()
+This requires that have a bloodier-than-bleeding-edge version of [filtr](https://github.com/straup/filtr/tree/heathr)
 installed.
 
 	$> filtr.py -w /path/to/webcam -o /path/to/filtr-ed -f /usr/bin/filtr/ -r pxl
 
 ### Picture taking
 
-This requires that you have [opencv]() installed (and a webcam)
+This requires that you have [opencv](http://opencv.willowgarage.com/wiki/) installed (and a webcam)
 
 	$> webcam.py -o /path/to/webcam -T 0
