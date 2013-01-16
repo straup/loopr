@@ -11,18 +11,18 @@ import logging
 
 import cv2
 
-def capture(outdir):
+def capture(opts):
 
     vidcap = cv2.VideoCapture()
-    vidcap.open(0)
+    vidcap.open(opts.camera)
 
     retval, image = vidcap.retrieve()
     vidcap.release()
     
     now = int(time.time())
-    fname = "%s.jpg" % now
+    fname = "%s-camera-%s.jpg" % (now, opts.camera)
 
-    path = os.path.join(outdir, fname)
+    path = os.path.join(opts.out, fname)
 
     cv2.imwrite(path, image)
     return path
@@ -32,8 +32,9 @@ if __name__ == '__main__':
     import optparse
 
     parser = optparse.OptionParser()
-    parser.add_option("-T", "--timer", dest="timer", help="...", default=0)
+    parser.add_option("-T", "--timer", dest="timer", help="...", default=0, type='int')
     parser.add_option("-o", "--out", dest="out", help="", default=None)
+    parser.add_option("-c", "--camera", dest="camera", help="", default=0, type='int')
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="enable chatty logging; default is false", default=False)
 
     (opts, args) = parser.parse_args()
@@ -46,10 +47,10 @@ if __name__ == '__main__':
     while True:
 
         try:
-            logging.debug("taking a picture...")
-            path = capture(opts.out)
+            logging.debug("taking a picture with camera %s" % opts.camera)
+            path = capture(opts)
         except Exception, e:
-            log.error("unable to time a picture, because: %s" % e)
+            logging.error("unable to time a picture, because: %s" % e)
             time.sleep(0.5)
             continue
 
