@@ -59,7 +59,14 @@ This requires that you have [opencv](http://opencv.willowgarage.com/wiki/) insta
 To do
 --
 
-Lots. Documentation first, then all the fancy stuff.
+Lots.
+
+* Documenting what's there, now.
+
+* Daemonizing all the tools and possibly adding a handy controller to... control
+  all the other pieces.
+ 
+* The fancy stuff.
 
 See also
 --
