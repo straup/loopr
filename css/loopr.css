@@ -1,0 +1,27 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    font-family: sans-serif;
+    
+}
+
+#wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    margin-top: 10%;
+}
+
+#blurb {
+    margin-top: 2em;
+    font-weight: 100;
+    line-height: 1.5em;
+}
+
+#blurb strong{
+    font-weight: 700;
+}
+
+#blurb a {
+    color: blue;
+}
