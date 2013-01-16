@@ -46,7 +46,7 @@ This requires that you have things like [gifsicle](http://www.lcdf.org/gifsicle/
 ### Filtering
 
 This requires that have a bloodier-than-bleeding-edge version of [filtr](https://github.com/straup/filtr/tree/heathr)
-installed.
+installed. _I will finish un-breaking it all soon, I promise._
 
 	$> filtr.py -w /path/to/webcam -o /path/to/filtr-ed -f /usr/bin/filtr/ -r pxl
 
