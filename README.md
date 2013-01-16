@@ -32,7 +32,7 @@ command line.
 
 Currently this uses Redis (so that means having things like [Redis](http://redis.io/) installed)
 to update the broadcasting piece but those two pieces (publishing and
-broadcasting) might be taught how to use Amazon's native [simple notification
+broadcasting) might also be taught how to use Amazon's native [simple notification
 service](https://aws.amazon.com/sns/).
 
 	$> publish-s3.py -w /path/to/loopr-ed -b aws_bucket -a aws_key -s aws_secret
