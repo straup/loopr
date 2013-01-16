@@ -64,5 +64,10 @@ Lots. Documentation first, then all the fancy stuff.
 See also
 --
 
-* ["like a dog humping your leg (with photos)"](http://www.aaronland.info/weblog/2011/05/07/fancy/#likeadog)
+* [like a dog humping your leg (with
+  photos)](http://www.aaronland.info/weblog/2011/05/07/fancy/#likeadog) – a blog
+  post about a real-time photo thing-y
+
+* [about pua.spum.org](http://pua.spum.org/about) – the about page for just such
+  a thing
 
