@@ -20,15 +20,20 @@ The five steps are:
 
 ### Broadcasting
 
-This will probably be renamed as `syndicate-json.py` and `syndicate-rss.py` and
-so on.
+This will probably be renamed as `syndicate-json.py` and other scripts like
+`syndicate-rss.py` and `syndicate-websockets.py` and so on will be added.
 
 	$> syndicate.py -b aws_bucket
       
 ### Publishing
 
 This will probably be updated to not require passing your AWS credentials on the
-command line. There will also eventually be a `publish-websockets.py` and so on.
+command line.
+
+Currently this uses Redis (so that means having things like [Redis](http://redis.io/) installed)
+to update the broadcasting piece but those two pieces (publishing and
+broadcasting) might be taught how to use Amazon's native [simple notification
+service](https://aws.amazon.com/sns/).
 
 	$> publish-s3.py -w /path/to/loopr-ed -b aws_bucket -a aws_key -s aws_secret
 
