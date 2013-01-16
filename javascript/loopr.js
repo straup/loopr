@@ -16,7 +16,6 @@ function loopr_load(){
 function loopr_show(loops){
 
 	var img = loops.pop()
-	console.log(img);
 
 	$("#offstage").attr("src", img);
 
@@ -28,4 +27,5 @@ function loopr_show(loops){
 	setTimeout(function(){
 		(loops.length) ? loopr_show(loops) : loopr_load();
 	}, 7000);
+
 }
