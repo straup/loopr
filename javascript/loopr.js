@@ -27,5 +27,5 @@ function loopr_show(loops){
 
 	setTimeout(function(){
 		(loops.length) ? loopr_show(loops) : loopr_load();
-	}, 10000);
+	}, 7000);
 }
