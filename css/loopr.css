@@ -13,7 +13,7 @@ body {
 }
 
 #blurb {
-    margin-top: 2em;
+    margin-top: 2.5em;
     font-weight: 100;
     line-height: 1.5em;
 }
@@ -24,4 +24,11 @@ body {
 
 #blurb a {
     color: blue;
+}
+
+.caveat {
+    font-size: 11px;
+    color: #ccc;
+    margin-top:1em;
+    text-align:right;
 }
