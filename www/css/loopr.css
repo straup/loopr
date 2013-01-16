@@ -1,0 +1,14 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+#wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    margin-top: 10%;
+}
+
+#loopr {
+}
