@@ -67,7 +67,9 @@ Lots.
 
 * Daemonizing all the tools and possibly adding a handy controller to... control
   all the other pieces.
- 
+
+* Make it work on a raspberry pi
+* 
 * The fancy stuff.
 
 See also
