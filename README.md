@@ -52,7 +52,7 @@ installed.
 
 ### Picture taking
 
-This requires that you have [opencv](http://opencv.willowgarage.com/wiki/) installed (and a webcam)
+This requires that you have [opencv](http://opencv.willowgarage.com/wiki/) installed (and a webcam).
 
 	$> webcam.py -o /path/to/webcam -T 0
 
