@@ -21,7 +21,7 @@ The five steps are:
 ### Broadcasting
 
 This will probably be renamed as `syndicate-json.py` and other scripts like
-`syndicate-rss.py` and `[syndicate-websockets.py](https://github.com/straup/fancy-idling/blob/master/display.py)` and so on will be added.
+`syndicate-rss.py` and [`syndicate-websockets.py`](https://github.com/straup/fancy-idling/blob/master/display.py) and so on will be added.
 
 	$> syndicate.py -b aws_bucket
       
