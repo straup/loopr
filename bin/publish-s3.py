@@ -25,8 +25,13 @@ def publish(path, opts):
         "-b", opts.bucket,
         "-g", "public-read",
         "-p", root,
-        path
         ]
+
+    if opts.prefix:
+        args.append("--key_prefix")
+        args.append(opts.prefix)
+
+    args.append(path)
 
     try:
         subprocess.check_call(args)
@@ -77,6 +82,7 @@ if __name__ == '__main__':
     parser.add_option("-a", "--accesskey", dest="accesskey", help="", default=None)
     parser.add_option("-s", "--secret", dest="secret", help="", default=None)
     parser.add_option("-b", "--bucket", dest="bucket", help="", default=None)
+    parser.add_option("-p", "--prefix", dest="prefix", help="", default=None)
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="enable chatty logging; default is false", default=False)
 
     (opts, args) = parser.parse_args()
