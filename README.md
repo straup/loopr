@@ -23,6 +23,8 @@ The five steps are:
 This will probably be renamed as `syndicate-json.py` and other scripts like
 `syndicate-rss.py` and [`syndicate-websockets.py`](https://github.com/straup/fancy-idling/blob/master/display.py) and so on will be added.
 
+Note: If you are publishing JSON files to S3 you will need to manually configure [Cross-Origin Resource Sharing](http://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html) (CORS) for your S3 bucket, by hand. If you don't and your "viewer" is not also an S3-backed website then you won't be able to read the index of animated gifs. 
+
 	$> syndicate.py -b aws_bucket
       
 ### Publishing
