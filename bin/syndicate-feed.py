@@ -5,27 +5,64 @@ import tempfile
 import json
 import os.path
 import logging
+import feedformatter
 
 def syndicate(urls, opts, pending='/Users/asc/Desktop/loopr'):
 
-    fname = "%s.json" % opts.bucket
+    feed = Feed()
 
-    try:
-        tmpdir = tempfile.gettempdir()
-        index = os.path.join(tmpdir, fname)
+    feed.feed["title"] = ""
+    feed.feed["link"] = ""
+    feed.feed["author"] = ""
+    feed.feed["description"] = ""
 
-        fh = open(index, 'w')
-        json.dump(urls, fh, indent=2)
-        fh.close()
+    for u in urls:
+
+        fq_url = ''
+
+        desc = '<img src="%s" />' % fq_url
+
+        item = {}
+        item["title"] = os.path.basename(u)
+        item["link"] = fq_url
+        item["description"] = descr
+        item["pubDate"] = time.localtime()
+        item["guid"] = "1234567890"
     
-        pending_path = os.path.join(pending, fname)
-        os.rename(index, pending_path)
+        feed.items.append(item)
+
+    rss1 = "%s_rss1.xml" % opts.bucket
+    rss2 = "%s_rss2.xml" % opts.bucket
+    atom = "%s_atom.xml" % opts.bucket
+
+    for out in (rss1, rss2, atom):
+
+        try:
+            tmpdir = tempfile.gettempdir()
+            index = os.path.join(tmpdir, fname)
+
+            pending_path = os.path.join(pending, out)
+
+            if out.endswith('rss1.xml'):
+                feed.format_rss1_file(pending_path)
+
+            elif out.endswith('rss2.xml'):
+                feed.format_rss2_file(pending_path)
+
+            else:
+                feed.format_atom_file(pending_path)
+
+            os.rename(index, pending_path)
 
     except Exception, e:
         print e
 
 if __name__ == '__main__':
 
+    print "THIS DOESN'T WORK YET"
+    sys.exit()
+
+    import sys
     import optparse
 
     parser = optparse.OptionParser()
