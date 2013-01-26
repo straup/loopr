@@ -6,7 +6,7 @@ timeout=5
 [filtr]
 watch=/path/to/loopr/webcam
 out=/path/to/loopr/filtr
-filtr=/Users/asc/filtr
+filtr=/path/to/filtr
 recipe=pxl
 
 [loopify]
