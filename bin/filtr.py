@@ -7,6 +7,7 @@ import subprocess
 import logging
 import glob
 import tempfile
+import ConfigParser
 
 if os.uname() == 'Darwin':
     from watchdog.observers.fsevents import FSEventsObserver as Observer
@@ -19,8 +20,6 @@ import multiprocessing
 
 def do_filtr(filtr_bin, path, outdir):
 
-    # This will need to be fixed eventually
-    # (20130114/straup)
     recipe = os.path.basename(filtr_bin)
 
     fname = os.path.basename(path)
@@ -53,11 +52,21 @@ class Eyeballs(FileSystemEventHandler):
         self.observer = observer
         self.opts = opts
 
-        filtr = os.path.join(self.opts.filtr, 'recipes', self.opts.recipe)
-        self.filtr_bin = os.path.realpath(filtr)
+        self.cfg = ConfigParser.ConfigParser()
+        self.cfg.read(opts.config)
 
-        for path in glob.glob("%s/*.jpg" % self.opts.watch):
-            pool.apply_async(do_filtr, (self.filtr_bin, path, self.opts.out))
+        self.watch = self.cfg.get('filtr', 'watch')
+        self.out = self.cfg.get('filtr', 'out')
+
+        filtr = os.path.join(self.cfg.get('filtr', 'filtr'), 'recipes', self.cfg.get('filtr', 'recipe'))
+        filtr = os.path.realpath(filtr)
+
+        self.filtr_bin = filtr
+
+        leftovers = glob.glob("%s/*.jpg" % self.watch)
+
+        for path in leftovers:
+            pool.apply_async(do_filtr, (self.filtr_bin, path, self.out))
         
     def on_any_event(self, event):
 
@@ -66,19 +75,21 @@ class Eyeballs(FileSystemEventHandler):
 
         path = event.src_path
 
-        # do_filtr(self.filtr_bin, path, self.opts.out)
-        pool.apply_async(do_filtr, (self.filtr_bin, path, self.opts.out))
+        pool.apply_async(do_filtr, (self.filtr_bin, path, self.out))
 
 if __name__ == '__main__':
 
     import optparse
 
     parser = optparse.OptionParser()
-    parser.add_option("-w", "--watch", dest="watch", help="", default=None)
-    parser.add_option("-o", "--out", dest="out", help="", default=None)
-    parser.add_option("-f", "--filtr", dest="filtr", help="The path to the filtr application", default=None)
-    parser.add_option("-r", "--recipe", dest="recipe", help="The name of the filtr to apply", default='filtr')
+    parser.add_option('-c', '--config', dest='config', action='store', help='path to a loopr config file - see source code for a sample config')
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="enable chatty logging; default is false", default=False)
+
+    # MAYBE: allow CLI flags to override the config file?
+    # parser.add_option("-w", "--watch", dest="watch", help="", default=None)
+    # parser.add_option("-o", "--out", dest="out", help="", default=None)
+    # parser.add_option("-f", "--filtr", dest="filtr", help="The path to the filtr application", default=None)
+    # parser.add_option("-r", "--recipe", dest="recipe", help="The name of the filtr to apply", default='filtr')
 
     (opts, args) = parser.parse_args()
 
@@ -90,7 +101,7 @@ if __name__ == '__main__':
     observer = Observer()
     event_handler = Eyeballs(observer, opts)
 
-    observer.schedule(event_handler, path=opts.watch, recursive=False)
+    observer.schedule(event_handler, path=event_handler.watch, recursive=False)
     observer.start()
 
     try:
