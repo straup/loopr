@@ -7,6 +7,7 @@ import subprocess
 import logging
 import tempfile
 import PIL.Image as Image
+import ConfigParser
 
 if os.uname() == 'Darwin':
     from watchdog.observers.fsevents import FSEventsObserver as Observer
@@ -99,7 +100,20 @@ class Eyeballs(FileSystemEventHandler):
         self.observer = observer
         self.opts = opts
 
-        self.count = int(opts.count)
+        self.cfg = ConfigParser.ConfigParser()
+        self.cfg.read(opts.config)
+
+        self.watch = self.cfg.get('loopify', 'watch')
+        self.out = self.cfg.get('loopify', 'out')
+        self.count = int(self.cfg.get('loopify', 'count'))
+
+        self.gifsicle = self.cfg.get('loopify', 'gifsicle')
+
+        if not os.path.exists(self.gifsicle):
+            raise Exception, "Can't find gifsicle (%s)" % self.gifsicle
+
+        self.maxwidth = self.cfg.get('loopify', 'max-width')
+        
         self.queue = []
 
     def on_any_event(self, event):
@@ -116,7 +130,7 @@ class Eyeballs(FileSystemEventHandler):
             self.queue = self.queue[self.count:]
 
             logging.debug("loopify now")
-            pool.apply_async(loopify, (self.opts.gifsicle, queue, self.opts.out, self.opts.maxwidth))
+            pool.apply_async(loopify, (self.gifsicle, queue, self.out, self.maxwidth))
 
 if __name__ == '__main__':
 
@@ -124,12 +138,15 @@ if __name__ == '__main__':
     import optparse
 
     parser = optparse.OptionParser()
-    parser.add_option("-w", "--watch", dest="watch", help="", default=None)
-    parser.add_option("-o", "--out", dest="out", help="", default=None)
-    parser.add_option("-c", "--count", dest="count", help="", default=200)
-    parser.add_option("--gifsicle", dest="gifsicle", help="", default="/usr/local/bin/gifsicle"),    
-    parser.add_option("--max-width", dest="maxwidth", help="", default=None)
+    parser.add_option('-c', '--config', dest='config', action='store', help='path to a loopr config file - see source code for a sample config')
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="enable chatty logging; default is false", default=False)
+
+    # MAYBE: allow CLI flags to override the config file?
+    # parser.add_option("-w", "--watch", dest="watch", help="", default=None)
+    # parser.add_option("-o", "--out", dest="out", help="", default=None)
+    # parser.add_option("-c", "--count", dest="count", help="", default=200)
+    # parser.add_option("--gifsicle", dest="gifsicle", help="", default="/usr/local/bin/gifsicle"),    
+    # parser.add_option("--max-width", dest="maxwidth", help="", default=None)
 
     (opts, args) = parser.parse_args()
 
@@ -141,7 +158,7 @@ if __name__ == '__main__':
     observer = Observer()
     event_handler = Eyeballs(observer, opts)
 
-    observer.schedule(event_handler, path=opts.watch, recursive=False)
+    observer.schedule(event_handler, path=event_handler.watch, recursive=False)
     observer.start()
 
     try:
