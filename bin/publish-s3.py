@@ -17,7 +17,7 @@ from watchdog.events import FileSystemEventHandler
 
 import multiprocessing
 
-def publish(path, aws_key, aws_secret, s3_bucket, s3_prefix):
+def publish(path, s3put, aws_key, aws_secret, s3_bucket, s3_prefix):
 
     root = os.path.dirname(path)
     fname = os.path.basename(path)
@@ -25,7 +25,7 @@ def publish(path, aws_key, aws_secret, s3_bucket, s3_prefix):
     # https://github.com/sbc/boto/blob/master/bin/s3put
 
     args = [
-        "s3put",
+        s3put,
         "-a", aws_key,
         "-s", aws_secret,
         "-b", s3_bucket,
@@ -73,6 +73,11 @@ class Eyeballs(FileSystemEventHandler):
 
         self.watch = self.cfg.get('publish-s3', 'watch')
 
+        self.s3put = self.cfg.get('publish-s3', 's3put')
+
+        if not os.path.exists(self.s3put):
+            raise Exception, "Can't find s3put (%s)" % self.s3put
+
     def on_any_event(self, event):
 
         if event.event_type != 'created':
@@ -82,12 +87,14 @@ class Eyeballs(FileSystemEventHandler):
 
         # Really? Just pass cfg, maybe?
 
+        s3put = self.cfg.get('publish-s3', 's3put')
+
         aws_key = self.cfg.get('publish-s3', 'aws_key')
         aws_secret = self.cfg.get('publish-s3', 'aws_secret')
         s3_bucket = self.cfg.get('publish-s3', 's3_bucket')
         s3_prefix = self.cfg.get('publish-s3', 's3_prefix')
 
-        pool.apply_async(publish, (path, aws_key, aws_secret, s3_bucket, s3_prefix))
+        pool.apply_async(publish, (path, s3put, aws_key, aws_secret, s3_bucket, s3_prefix))
         
 
 if __name__ == '__main__':
