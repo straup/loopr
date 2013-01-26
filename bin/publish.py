@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 
 import time
+import os
 import os.path
 import logging
 import redis
 
-from watchdog.observers.fsevents import FSEventsObserver as Observer
+if os.uname() == 'Darwin':
+    from watchdog.observers.fsevents import FSEventsObserver as Observer
+else:
+    from watchdog.observers import Observer
+
 from watchdog.events import FileSystemEventHandler
 
 import multiprocessing
