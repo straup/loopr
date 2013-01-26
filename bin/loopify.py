@@ -87,9 +87,11 @@ def loopify(gifsicle, queue, outdir, maxwidth=None):
     except Exception, e:
         logging.error(e)
 
+    return
+
     for path in gif_queue:
         os.unlink(path)
-
+        
 pool = multiprocessing.Pool()
 
 #
@@ -118,10 +120,15 @@ class Eyeballs(FileSystemEventHandler):
 
     def on_any_event(self, event):
 
-        if event.event_type != 'created':
-            return
+        if event.event_type == 'created':
+            self.queue.append(event.src_path)
 
-        self.queue.append(event.src_path)
+        # WTF linux?
+
+        elif event.event_type == 'moved':
+            self.queue.append(event.dest_path)
+        else:
+            return False
 
         logging.debug("queue length: %s (trigger at %s)" % (len(self.queue), self.count))
 
