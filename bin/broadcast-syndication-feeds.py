@@ -7,35 +7,41 @@ import os.path
 import logging
 import feedformatter
 import time
+import hashlib
 
-def syndicate(urls, opts):
+def syndicate(urls, cfg):
 
     feed = feedformatter.Feed()
 
-    feed.feed["title"] = opts.bucket
-    feed.feed["link"] = ""
-    feed.feed["author"] = "loopr"
-    feed.feed["description"] = ""
+    feed.feed["title"] = cfg.get('broadcast-syndication-feeds', 'title')
+    feed.feed["link"] = cfg.get('broadcast-syndication-feeds', 'link')
+    feed.feed["author"] = cfg.get('broadcast-syndication-feeds', 'author')
+    feed.feed["description"] = cfg.get('broadcast-syndication-feeds', 'description')
 
     for url in urls:
 
         title = os.path.basename(url)
         desc = '<img src="%s" />' % url
 
-        guid = "%s-%s" % (opts.bucket, title)
+        hash = hashlib.md5()
+        hash.update(url)
+
+        guid = hash.digest()
 
         item = {}
         item["title"] = title
         item["link"] = url
-        item["description"] = descr
+        item["description"] = desc
         item["pubDate"] = time.localtime()
         item["guid"] = guid
     
         feed.items.append(item)
 
-    rss1 = "%s_rss1.xml" % opts.bucket
-    rss2 = "%s_rss2.xml" % opts.bucket
-    atom = "%s_atom.xml" % opts.bucket
+    rss1 = "rss1.xml"
+    rss2 = "rss2.xml"
+    atom = "atom.xml"
+
+    outdir = cfg.get('broadcast-syndication-feeds', 'out')
 
     for what in (rss1, rss2, atom):
 
@@ -43,7 +49,7 @@ def syndicate(urls, opts):
             tmpdir = tempfile.gettempdir()
 
             pending_path = os.path.join(tmpdir, what)
-            publish_path = os.path.join(opts.opt, what)
+            publish_path = os.path.join(outdir, what)
 
             if out.endswith('rss1.xml'):
                 feed.format_rss1_file(pending_path)
@@ -65,22 +71,21 @@ if __name__ == '__main__':
     import optparse
 
     parser = optparse.OptionParser()
-    parser.add_option("-b", "--bucket", dest="bucket", help="", default=None)
-    parser.add_option("-o", "--out", dest="out", help="", default=None)
+
+    parser.add_option('-c', '--config', dest='config', action='store', help='path to a loopr config file - see source code for a sample config')
     parser.add_option("-v", "--verbose", dest="verbose", action="store_true", help="enable chatty logging; default is false", default=False)
-    parser.add_option("-c", "--count", dest="count", action="store", help="number of loops to include", default=15, type='int')
 
     (opts, args) = parser.parse_args()
-
-    print "THIS DOESN'T WORK YET"
-    sys.exit()
 
     if opts.verbose:
         logging.basicConfig(level=logging.DEBUG)
     else:
         logging.basicConfig(level=logging.INFO)
 
-    channel = "loopr_%s" % opts.bucket.replace(".", "_")
+    cfg = ConfigParser.ConfigParser()
+    cfg.read(opts.config)
+
+    channel = cfg.get('broadcast-syndication-feeds', 'channel')
 
     r = redis.Redis()
 
@@ -91,8 +96,6 @@ if __name__ == '__main__':
 
         for item in ps.listen():
 
-            print item
-
             if item['type'] != 'message':
                 continue
 
@@ -100,9 +103,9 @@ if __name__ == '__main__':
 
                 r.lpush('loopr_urls', item['data'])
                 r.ltrim('loopr_urls', 0, 100)
-                urls = r.lrange('loopr_urls', 0, opts['count'])
+                urls = r.lrange('loopr_urls', 0, 15)
 
-                syndicate(urls, opts)
+                syndicate(urls, cfg)
                     
             else:
                 pass
