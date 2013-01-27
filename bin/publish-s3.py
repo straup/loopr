@@ -50,6 +50,8 @@ def publish(path, s3put, aws_key, aws_secret, s3_bucket, s3_prefix):
     aws_path = "%s/%s" % (s3_bucket, fname)
     url = 'http://s3.amazonaws.com/%s' % aws_path
 
+    # FIX ME: read from cfg (and check there is a pubsub channel)
+
     key = "loopr_%s" % s3_bucket.replace(".", "_")
 
     try:
@@ -82,6 +84,8 @@ class Eyeballs(FileSystemEventHandler):
 
         if event.event_type != 'created':
             return
+
+        # FIX ME: allow 'move' events ?
 
         path = event.src_path
 

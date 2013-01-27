@@ -23,8 +23,9 @@ aws_key=YOUR_AWS_ACCESSKEY
 aws_secret=YOUR_AWS_SECRET
 s3_bucket=loopr-bucket
 s3_prefix=
+pubsub_channel=loopr_bucket
 
 [broadcast-json]
+pubsub_channel=loopr_bucket
 count=20
-channel=loopr_loopr_bucket
-outfile=/path/to/loopr/publish
+out=/path/to/loopr/publish

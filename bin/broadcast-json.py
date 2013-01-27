@@ -7,17 +7,20 @@ import os.path
 import logging
 import ConfigParser
 
-def syndicate(urls, outfile):
+def syndicate(urls, outdir, channel):
 
     try:
 
-        fname = os.path.basename(outfile)
+        fname = "%s.json" % channel
+        outfile = os.path.join(outdir, fname)
 
         tmpdir = tempfile.gettempdir()
         tmpfile = os.path.join(tmpdir, fname)
 
-        fh = open(index, 'w')
-        json.dump(urls, fh, indent=2)
+        data = { 'loops': urls }
+
+        fh = open(tmpfile, 'w')
+        json.dump(data, fh, indent=2)
         fh.close()
     
         os.rename(tmpfile, outfile)
@@ -48,9 +51,9 @@ if __name__ == '__main__':
     cfg = ConfigParser.ConfigParser()
     cfg.read(opts.config)
 
-    channel = cfg.get('broadcast-json', 'channel')
+    channel = cfg.get('broadcast-json', 'pubsub_channel')
     count = cfg.get('broadcast-json', 'count')
-    outfile = cfg.get('broadcast-json', 'outfile')
+    outdir = cfg.get('broadcast-json', 'out')
     
     r = redis.Redis()
 
@@ -61,6 +64,8 @@ if __name__ == '__main__':
 
         for item in ps.listen():
 
+            logging.debug(item)
+
             if item['type'] != 'message':
                 continue
 
@@ -70,7 +75,7 @@ if __name__ == '__main__':
                 r.ltrim('loopr_urls', 0, 100)
                 urls = r.lrange('loopr_urls', 0, count)
 
-                syndicate(urls, outfile)
+                syndicate(urls, outdir, channel)
                     
             else:
                 pass
