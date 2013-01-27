@@ -87,26 +87,42 @@ There's also a "viewing" piece which will depend on the type of broadcasting you
 The config file
 --
 
-This is still a bit of a moving target and, as a result, some of the naming conventions might be suitably dumb and wrong.
+This is still a bit of a moving target and, as a result, some of the naming conventions might be suitably dumb and wrong. The config file consists of a number of blocks whose name should correspond to the name of a particular tool (minus the tool's extension). Really, you can all the blocks whatever you want so as your code knows where, in the config file, to look but that makes things confusing for everyone else...
 
 ### Picture taking
 
 #### [webcam-opencv]
+
+Used by the [`webcam-opencv.py`]() script.
+
+* `out` - the directory where camera images are saved
+
+* `camera` - the index of the camera that OpenCV should look for (usually just '0')
+
+* `timeout` - the number of seconds the camera should wait before taking another photo
+
+For example:
 
 	[webcam-opencv]
 	out=/path/to/loopr/webcam
 	camera=0
 	timeout=5
 
-* out
-
-* camera
-
-* timeout
-
 ### Filtering
 
 #### [filtr]
+
+Used by the [`loopify.py`]() script.
+
+* `watch` - the directory to watch for new photos (basically the `out` folder defined above in the "picture taking" section)
+
+* `out` - the directory where filtr-ed photos are saved
+
+* `filtr` - the path to your copy of [filtr](http://straup.github.com/filtr/) (the folder itself and not the script)
+
+* `recipe` - the name of the `filtr` recipe to invoke
+
+For example:
 
 	[filtr]
 	watch=/path/to/loopr/webcam
@@ -117,6 +133,20 @@ This is still a bit of a moving target and, as a result, some of the naming conv
 ### Enloopifying
 
 #### [loopify]
+
+Used by the [`loopify.py`]() script.
+
+* `watch` - the directory to watch for new photos (basically the `out` folder defined above in the "filtering" section)
+
+* `out` - the directory where newly created animated GIFs are saved
+
+* `gifsicle` - the path to your copy of the [gifsicle]() application
+
+* `count` - the number of photos (from the `watch` directory) to include in each animated GIF
+
+* `max-width` - ensure that each photo/frame is no wider than this value before creating an animated GIF (optional)
+
+For example:
 
 	[loopify]
 	watch=/path/to/loopr/filtr
@@ -129,9 +159,27 @@ This is still a bit of a moving target and, as a result, some of the naming conv
 
 #### [publish-s3]
 
+Used by the [`publish-s3.py`]() script.
+
+* `watch` - the directory to watch for new things to upload to S3
+
+* `s3put` - the path to your copy of the [s3put]() application
+
+* `aws_key` - your Amazon Web Services (AWS) access key
+
+* `aws_secret` - your Amazon Web Services (AWS) access secret
+
+* `s3_bucket` - the name of the AWS S3 bucket where uploads should be saved
+
+* `s3_prefix` - the name(s) of the sub directories where your uploads should be saved inside of `s3_bucket` (optional)
+
+* pubsub_channel` - the name of a Redis pubsub channel to send notifications to once an upload is complete; notifications are only sent for animated GIF files (optional)
+
+For example:
+
 	[publish-s3]
-	s3put=/usr/local/bin/s3put
 	watch=/path/to/loopr/publish
+	s3put=/usr/local/bin/s3put
 	aws_key=YOUR_AWS_ACCESSKEY
 	aws_secret=YOUR_AWS_SECRET
 	s3_bucket=loopr-bucket
@@ -142,12 +190,38 @@ This is still a bit of a moving target and, as a result, some of the naming conv
 
 #### [broadcast-json]
 
+Used by the [`broadcast-json.py`]() script.
+
+* pubsub_channel` - the name of a Redis pubsub channel to listen to for notifications of new URLs to be broadcast
+
+* `count` - the number of URLs to include in the final JSON file
+
+* `out` - the directory where the final JSON file will be stored (note how we're writing it to the "publish-s3" folder)
+
+For example:
+
 	[broadcast-json]
 	pubsub_channel=loopr_bucket
 	count=20
 	out=/path/to/loopr/publish
 
 #### [broadcast-syndication-feeds]
+
+Used by the [`broadcast-syndication-feeds.py`]() script.
+
+* pubsub_channel` - the name of a Redis pubsub channel to listen to for notifications of new URLs to be broadcast
+
+* `out` - the directory where the final JSON file will be stored (note how we're writing it to the "publish-s3" folder)
+
+* `title` - the title of the syndication feed
+
+* `link` - the URL of the source being syndicated
+
+* `author` - the author of the syndication feed / source
+
+* `description` - the description of the syndication feed / source
+
+For example:
 
 	[broadcast-syndication-feeds]
 	pubsub_channel=loopr_bucket
