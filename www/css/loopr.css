@@ -1,6 +1,8 @@
 body {
     margin: 0px;
     padding: 0px;
+    font-family: sans-serif;
+    font-weight: 100;
 }
 
 #wrapper {
@@ -8,7 +10,30 @@ body {
     margin-right: auto;
     width: 500px;
     margin-top: 10%;
+    text-align:right;
 }
 
 #loopr {
+}
+
+#caption {
+    margin-top: 2em;
+}
+
+#when {
+    text-align:right;
+    margin-top: 1em;
+    color: #ccc;
+}
+
+#fullscreen {
+    border: solid thin;
+    background-color: #fff;
+    border:none;
+    margin-top:.5em;
+    margin-right:.0;
+    font-weight:100 !important;
+    padding:0;
+    font-size: 11px;
+    color: #666;
 }

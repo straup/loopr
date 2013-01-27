@@ -2,6 +2,7 @@
 	<head>
 		<title>Loopr</title>
 		<script type="text/javascript" src="javascript/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="javascript/fullscreen-api-polyfill.js"></script>
 		<script type="text/javascript" src="javascript/loopr.config.js"></script>
 		<script type="text/javascript" src="javascript/loopr.js"></script>
 		<script type="text/javascript"> $(document).ready(loopr_init); </script>
@@ -11,6 +12,9 @@
 		<div id="wrapper">
 			<img id="loopr" src="" />
 			<img id="offstage" src="" style="display:none;"/>
+			<button id="fullscreen">fill my screen with this!</button>
+			<div id="caption"></div>
+			<div id="when"></div>
 		</div>
 	</body>
 </html>
