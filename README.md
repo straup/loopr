@@ -29,11 +29,13 @@ Currently there are two "broadcasters". One which uploads JSON files to S3:
 
 	$> broadcast-json.py -c loopr.cfg
 
-And a second which uploads various syndication feeds (RSS 1.0; RSS 2.0; Atom) to S3:
+_If you are publishing JSON files to S3 you will need to manually configure [Cross-Origin Resource Sharing](http://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html) (CORS) for your S3 bucket, by hand. If you don't and your "viewer" is not also an S3-backed website then you won't be able to read the index of animated gifs._
+
+And a second which uploads various syndication feeds (RSS 1.0; RSS 2.0) to S3:
 
 	$> broadcast-syndication-feeds.py -c loopr.cfg
 
-Note: If you are publishing JSON files to S3 you will need to manually configure [Cross-Origin Resource Sharing](http://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html) (CORS) for your S3 bucket, by hand. If you don't and your "viewer" is not also an S3-backed website then you won't be able to read the index of animated gifs. 
+_Support for Atom syndication feeds is present but currently disabled until I can figure out why the `feedformatter` Python library isn't including little HTML blobs with the actual animated GIFs in its final output._
 
 Eventually other scripts like [`broadcast-websockets.py`](https://github.com/straup/fancy-idling/blob/master/display.py) will be added.
       
