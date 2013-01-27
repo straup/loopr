@@ -21,7 +21,7 @@ the airport waiting for a red-eye.
 
 The five steps are:
 
-_Note: the `loopr.cfg` mentioned in all these examples is discussed in detail, below._
+_Note: the `loopr.cfg` file mentioned in all these examples is discussed in detail, below._
 
 ### Broadcasting
 
@@ -89,17 +89,15 @@ The config file
 
 Loopr figures how and where to do stuff using a plain-vanilla `.ini` style config file.
 
-The config file consists of a number of blocks whose name should correspond to the name of a particular tool (minus the tool's extension). Really, you can all the blocks whatever you want so as your code knows where, in the config file, to look but that makes things confusing for everyone else...
+The config file consists of a number of blocks whose name should correspond to the name of a particular tool (minus the tool's extension). Really, you can all the blocks whatever you want so as your code knows where, in the config file, to look but that makes things confusing for everyone else.
 
-It is still a bit of a moving target and, as a result, some of the naming conventions might be suitably dumb and wrong.
-
-An [example config file]() is included with the source code. This is how it breaks down:
+It is still a bit of a moving target and, as a result, some of the naming conventions might be suitably dumb and wrong. An [example config file](https://github.com/straup/loopr/blob/master/bin/loopr.cfg.example) is included with the source code. This is how it breaks down:
 
 ### Picture taking
 
 #### [webcam-opencv]
 
-Used by the [`webcam-opencv.py`]() script.
+Used by the [`webcam-opencv.py`](https://github.com/straup/loopr/blob/master/bin/webcam-opencv.py) script.
 
 * `out` - the directory where camera images are saved
 
@@ -118,7 +116,7 @@ For example:
 
 #### [filtr]
 
-Used by the [`loopify.py`]() script.
+Used by the [`filtr.py`](https://github.com/straup/loopr/blob/master/bin/filtr.py) script.
 
 * `watch` - the directory to watch for new photos (basically the `out` folder defined above in the "picture taking" section)
 
@@ -140,7 +138,7 @@ For example:
 
 #### [loopify]
 
-Used by the [`loopify.py`]() script.
+Used by the [`loopify.py`](https://github.com/straup/loopr/blob/master/bin/loopify.py) script.
 
 * `watch` - the directory to watch for new photos (basically the `out` folder defined above in the "filtering" section)
 
@@ -165,7 +163,7 @@ For example:
 
 #### [publish-s3]
 
-Used by the [`publish-s3.py`]() script.
+Used by the [`publish-s3.py`](https://github.com/straup/loopr/blob/master/bin/publish-s3.py) script.
 
 * `watch` - the directory to watch for new things to upload to S3
 
@@ -196,7 +194,7 @@ For example:
 
 #### [broadcast-json]
 
-Used by the [`broadcast-json.py`]() script.
+Used by the [`broadcast-json.py`](https://github.com/straup/loopr/blob/master/bin/broadcast-json.py) script.
 
 * pubsub_channel` - the name of a Redis pubsub channel to listen to for notifications of new URLs to be broadcast
 
@@ -213,7 +211,7 @@ For example:
 
 #### [broadcast-syndication-feeds]
 
-Used by the [`broadcast-syndication-feeds.py`]() script.
+Used by the [`broadcast-syndication-feeds.py`](https://github.com/straup/loopr/blob/master/bin/broadcast-syndication-feeds.py) script.
 
 * pubsub_channel` - the name of a Redis pubsub channel to listen to for notifications of new URLs to be broadcast
 
