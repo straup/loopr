@@ -29,3 +29,11 @@ pubsub_channel=loopr_bucket
 pubsub_channel=loopr_bucket
 count=20
 out=/path/to/loopr/publish
+
+[broadcast-syndication-feeds]
+pubsub_channel=loopr_bucket
+out=/path/to/publish
+title=loopr
+link=http://straup.github.com/loopr
+author=loopr
+description=loop all the things
