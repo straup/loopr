@@ -22,7 +22,7 @@ The five steps are:
 
 Currently there is a single "broadcaster" which uploads JSON files to S3:
 
-	$> syndicate-json.py -b aws_bucket
+	$> broadcast-json.py -b aws_bucket
 
 Note: If you are publishing JSON files to S3 you will need to manually configure [Cross-Origin Resource Sharing](http://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html) (CORS) for your S3 bucket, by hand. If you don't and your "viewer" is not also an S3-backed website then you won't be able to read the index of animated gifs. 
 

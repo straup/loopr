@@ -11,7 +11,7 @@ recipe=pxl
 
 [loopify]
 watch=/path/to/loopr/filtr
-out=/path/to/loopr/loops
+out=/path/to/loopr/publish
 gifsicle=/usr/local/bin/gifsicle
 count=5
 max-width=500
@@ -23,3 +23,8 @@ aws_key=YOUR_AWS_ACCESSKEY
 aws_secret=YOUR_AWS_SECRET
 s3_bucket=loopr-bucket
 s3_prefix=
+
+[broadcast-json]
+count=20
+channel=loopr_loopr_bucket
+outfile=/path/to/loopr/publish
