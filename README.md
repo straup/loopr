@@ -84,7 +84,7 @@ _See the way there there's no config file being passed to the shell script. Yeah
 
 There's also a "viewing" piece which will depend on the type of broadcasting you're doing. Take a look at the [www directory](https://github.com/straup/loopr/tree/master/www) for some sample code that displays animated gifs broadcast as a JSON file, that is updated periodically.
 
-Like [this](http://straup.github.com/loopr/). Or [these](http://www.aaronland.info/loopr/).
+Like [this](http://straup.github.com/loopr/). Or [these](http://www.aaronland.info/loopr/). Or [this](https://s3.amazonaws.com/info.aaronland.loopr/pxlunch/rss2.xml) if you've got an RSS reader handy.
 
 The config file
 --
