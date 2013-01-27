@@ -21,19 +21,25 @@ the airport waiting for a red-eye.
 
 The five steps are:
 
+_Note: the `loopr.cfg` mentioned in all these examples is discussed in detail, below._
+
 ### Broadcasting
 
-Currently there is a single "broadcaster" which uploads JSON files to S3:
+Currently there are two "broadcasters". One which uploads JSON files to S3:
 
 	$> broadcast-json.py -c loopr.cfg
 
+And a second which uploads various syndication feeds (RSS 1.0; RSS 2.0; Atom) to S3:
+
+	$> broadcast-syndication-feeds.py -c loopr.cfg
+
 Note: If you are publishing JSON files to S3 you will need to manually configure [Cross-Origin Resource Sharing](http://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html) (CORS) for your S3 bucket, by hand. If you don't and your "viewer" is not also an S3-backed website then you won't be able to read the index of animated gifs. 
 
-Eventually other scripts like `syndicate-rss.py` and [`syndicate-websockets.py`](https://github.com/straup/fancy-idling/blob/master/display.py) and so on will be added.
+Eventually other scripts like [`broadcast-websockets.py`](https://github.com/straup/fancy-idling/blob/master/display.py) will be added.
       
 ### Publishing
 
-There is currently one "publisher" that watches a folder for new files and then puts them in an S3 bucket. Files are added with `public-read` permissions.
+There is currently one "publisher" that watches a folder for new files and then puts them in an S3 bucket. It uses the `s3put` script for uploading files which is included with the Python [boto](https://github.com/sbc/boto) libraries, so you'll need to make sure those are installed. Files are added with `public-read` permissions.
 
 The publishing and broadcasting pieces use Redis (so that means having things like [Redis](http://redis.io/) installed)
 to update the broadcasting piece but those two pieces (publishing and

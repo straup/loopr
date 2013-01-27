@@ -17,7 +17,14 @@ from watchdog.events import FileSystemEventHandler
 
 import multiprocessing
 
-def publish(path, s3put, aws_key, aws_secret, s3_bucket, s3_prefix):
+def publish(cfg, path):
+
+    s3put = cfg.get('publish-s3', 's3put')
+
+    aws_key = cfg.get('publish-s3', 'aws_key')
+    aws_secret = cfg.get('publish-s3', 'aws_secret')
+    s3_bucket = cfg.get('publish-s3', 's3_bucket')
+    s3_prefix = cfg.get('publish-s3', 's3_prefix')
 
     root = os.path.dirname(path)
     fname = os.path.basename(path)
@@ -47,18 +54,28 @@ def publish(path, s3put, aws_key, aws_secret, s3_bucket, s3_prefix):
 
     os.unlink(path)
 
-    aws_path = "%s/%s" % (s3_bucket, fname)
+    aws_parts = [ s3_bucket ]
+
+    if s3_prefix != '':
+        aws_parts.append(s3_prefix)
+
+    aws_parts.append(fname)
+
+    aws_path = "/".join(aws_parts)
     url = 'http://s3.amazonaws.com/%s' % aws_path
 
-    # FIX ME: read from cfg (and check there is a pubsub channel)
+    channel = cfg.get('publish-s3', 'pubsub_channel')
 
-    key = "loopr_%s" % s3_bucket.replace(".", "_")
+    if channel != '' and fname.endswith('.gif'):
 
-    try:
-        r = redis.Redis()
-        r.publish(key, url)
-    except Exception, e:
-        print e
+        try:
+
+            logging.debug("push %s to '%s' channel" % (url, channel))
+
+            r = redis.Redis()
+            r.publish(channel, url)
+        except Exception, e:
+            print e
 
 pool = multiprocessing.Pool()
 
@@ -82,23 +99,19 @@ class Eyeballs(FileSystemEventHandler):
 
     def on_any_event(self, event):
 
-        if event.event_type != 'created':
-            return
+        path = None
 
-        # FIX ME: allow 'move' events ?
+        if event.event_type == 'created':
+            path = event.src_path
 
-        path = event.src_path
+        # WTF linux?
 
-        # Really? Just pass cfg, maybe?
+        elif event.event_type == 'moved':
+            path = event.dest_path
+        else:
+            return False
 
-        s3put = self.cfg.get('publish-s3', 's3put')
-
-        aws_key = self.cfg.get('publish-s3', 'aws_key')
-        aws_secret = self.cfg.get('publish-s3', 'aws_secret')
-        s3_bucket = self.cfg.get('publish-s3', 's3_bucket')
-        s3_prefix = self.cfg.get('publish-s3', 's3_prefix')
-
-        pool.apply_async(publish, (path, s3put, aws_key, aws_secret, s3_bucket, s3_prefix))
+        pool.apply_async(publish, (self.cfg, path))
         
 
 if __name__ == '__main__':
