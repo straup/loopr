@@ -91,7 +91,7 @@ The config file
 
 Loopr figures how and where to do stuff using a plain-vanilla `.ini` style config file.
 
-The config file consists of a number of blocks whose name should correspond to the name of a particular tool (minus the tool's extension). Really, you can all the blocks whatever you want so as your code knows where, in the config file, to look but that makes things confusing for everyone else.
+The config file consists of a number of blocks whose name should correspond to the name of a particular tool (minus the tool's extension). Really, you can call the blocks whatever you want so as your code knows where, in the config file, to look but that makes things confusing for everyone else.
 
 It is still a bit of a moving target and, as a result, some of the naming conventions might be suitably dumb and wrong. An [example config file](https://github.com/straup/loopr/blob/master/bin/loopr.cfg.example) is included with the source code. This is how it breaks down:
 
