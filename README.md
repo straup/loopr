@@ -87,7 +87,13 @@ There's also a "viewing" piece which will depend on the type of broadcasting you
 The config file
 --
 
-This is still a bit of a moving target and, as a result, some of the naming conventions might be suitably dumb and wrong. The config file consists of a number of blocks whose name should correspond to the name of a particular tool (minus the tool's extension). Really, you can all the blocks whatever you want so as your code knows where, in the config file, to look but that makes things confusing for everyone else...
+Loopr figures how and where to do stuff using a plain-vanilla `.ini` style config file.
+
+The config file consists of a number of blocks whose name should correspond to the name of a particular tool (minus the tool's extension). Really, you can all the blocks whatever you want so as your code knows where, in the config file, to look but that makes things confusing for everyone else...
+
+It is still a bit of a moving target and, as a result, some of the naming conventions might be suitably dumb and wrong.
+
+An [example config file]() is included with the source code. This is how it breaks down:
 
 ### Picture taking
 
@@ -140,7 +146,7 @@ Used by the [`loopify.py`]() script.
 
 * `out` - the directory where newly created animated GIFs are saved
 
-* `gifsicle` - the path to your copy of the [gifsicle]() application
+* `gifsicle` - the path to your copy of the [gifsicle](http://www.lcdf.org/gifsicle/) application
 
 * `count` - the number of photos (from the `watch` directory) to include in each animated GIF
 
@@ -163,7 +169,7 @@ Used by the [`publish-s3.py`]() script.
 
 * `watch` - the directory to watch for new things to upload to S3
 
-* `s3put` - the path to your copy of the [s3put]() application
+* `s3put` - the path to your copy of the [s3put](https://github.com/boto/boto) application
 
 * `aws_key` - your Amazon Web Services (AWS) access key
 
