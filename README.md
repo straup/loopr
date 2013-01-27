@@ -54,9 +54,23 @@ This requires version 1.0 (or higher) of [filtr](https://github.com/straup/filtr
 
 ### Picture taking
 
-This requires that you have [opencv](http://opencv.willowgarage.com/wiki/) installed (and a webcam).
+By default, this requires that you have [OpenCV](http://opencv.willowgarage.com/wiki/) installed (and a webcam).
 
-	$> webcam.py -o /path/to/webcam -T 0
+	$> webcam-opencv.py -o /path/to/webcam -T 0
+
+OpenCV is actually pretty easy to install but on some flavours of Linux it can
+be kind of fussy (read: I haven't figured out all the chanting I need to do to
+make it work on a Raspberry Pi). If you can install the
+[fswebcam](https://github.com/fsphil/fswebcam) application there's also a simple
+wrapper tool for using that instead:
+
+	$> webcam-fswebcam.sh /path/to/webcam 
+
+_Note: As of this writing both the device (`/dev/video1`) and the image
+resolution (`1280x720`) are hardcoded so you may need to tweak those by
+hand. This is not a feature.
+
+### Viewing pictures
 
 There's also a "viewing" piece which will depend on the type of broadcasting you're doing. Take a look at the [www directory](https://github.com/straup/loopr/tree/master/www) for some sample code that displays animated gifs broadcast as a JSON file, that is updated periodically. [Like this.](http://straup.github.com/loopr/)
 
@@ -70,8 +84,6 @@ Lots.
 * Daemonizing all the tools and possibly adding a handy controller to... control
   all the other pieces.
 
-* Make it work on a raspberry pi
-* 
 * The fancy stuff.
 
 See also

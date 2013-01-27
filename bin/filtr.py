@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 
 import time
+import os
 import os.path
 import subprocess
 import logging
 import glob
 import tempfile
 
-from watchdog.observers.fsevents import FSEventsObserver as Observer
+if os.uname() == 'Darwin':
+    from watchdog.observers.fsevents import FSEventsObserver as Observer
+else:
+    from watchdog.observers import Observer
+
 from watchdog.events import FileSystemEventHandler
 
 import multiprocessing
