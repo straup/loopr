@@ -8,6 +8,7 @@ import logging
 import feedformatter
 import time
 import hashlib
+import ConfigParser
 
 def syndicate(urls, cfg):
 
@@ -51,10 +52,10 @@ def syndicate(urls, cfg):
             pending_path = os.path.join(tmpdir, what)
             publish_path = os.path.join(outdir, what)
 
-            if out.endswith('rss1.xml'):
+            if what.endswith('rss1.xml'):
                 feed.format_rss1_file(pending_path)
 
-            elif out.endswith('rss2.xml'):
+            elif what.endswith('rss2.xml'):
                 feed.format_rss2_file(pending_path)
 
             else:
@@ -85,7 +86,7 @@ if __name__ == '__main__':
     cfg = ConfigParser.ConfigParser()
     cfg.read(opts.config)
 
-    channel = cfg.get('broadcast-syndication-feeds', 'channel')
+    channel = cfg.get('broadcast-syndication-feeds', 'pubsub_channel')
 
     r = redis.Redis()
 
@@ -95,6 +96,8 @@ if __name__ == '__main__':
     while True:
 
         for item in ps.listen():
+
+            logging.debug(item)
 
             if item['type'] != 'message':
                 continue
