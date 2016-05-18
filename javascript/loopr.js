@@ -1,4 +1,4 @@
-var loopr_url = 'http://info.aaronland.loopr.s3.amazonaws.com/info.aaronland.loopr.json';
+var loopr_url = 'https://info.aaronland.loopr.s3.amazonaws.com/info.aaronland.loopr.json';
 
 function loopr_init(){
 	loopr_load();
